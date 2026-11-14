@@ -1,32 +1,33 @@
-%***************************************************************************************************
-% main.tex - szkielet dokumentu. Dane dokumentu edytuj w config/metadata.tex,
-% treść w katalogu chapters/, a wygląd w preamble/ i config/theme-pwr.tex.
-% Kompilacja: pdfLaTeX + BibTeX (na Overleaf: kompilator pdfLaTeX, plik główny main.tex).
-%***************************************************************************************************
 
-% Dla druku jednostronnego zamień "twoside" na "oneside".
-\documentclass[11pt, a4paper, twoside, openany]{book}
+% Szkielet dokumentu. Kompilacja: pdfLaTeX + BibTeX (plik główny: main.tex).
+% Dla druku dwustronnego zamień "oneside" na "twoside".
+\documentclass[11pt, a4paper, oneside, openany]{book}
 
-% ============================== KONFIGURACJA I PREAMBUŁA ==============================
-\input{config/metadata}          % dane dokumentu i przełączniki
-\input{preamble/packages}        % pakiety (kolejność istotna)
-\input{config/theme-pwr}         % kolory, nazwy uczelni i wydziału, logo
-\input{preamble/polish}          % polskie napisy dokumentu
-\input{preamble/macros}          % makra, twierdzenia, listy
+% --- Konfiguracja i preambuła ---
+\input{config/metadata}
+\input{preamble/packages}
+\input{config/theme-pwr}
+\input{preamble/polish}
+\input{preamble/macros}
 \input{preamble/floats-and-tables}
 \input{preamble/listings}
 \input{preamble/headings}
 \input{preamble/pagestyles}
-\input{preamble/links}           % hyperref - zawsze na końcu
+\input{preamble/links}
 
 \begin{document}
 
-% ============================== CZĘŚĆ WSTĘPNA ==============================
+% --- Część wstępna ---
 \frontmatter
-\assignpagestyle{\chapter}{frontstyle}   % pierwsze strony rozdziałów wstępnych: czyste
+\assignpagestyle{\chapter}{frontstyle}
 \pagestyle{frontstyle}
 
+\hypersetup{pageanchor=false}
 \input{frontmatter/titlepage}
+\hypersetup{pageanchor=true}
+\ifshowabstract
+    \input{frontmatter/abstract}
+\fi
 
 \clearpage\phantomsection
 \tableofcontents
@@ -35,9 +36,9 @@
     \input{frontmatter/abbreviations}
 \fi
 
-% ============================== TREŚĆ GŁÓWNA ==============================
+% --- Treść główna ---
 \mainmatter
-\assignpagestyle{\chapter}{chapterfirst} % pierwsza strona rozdziału: tylko stopka
+\assignpagestyle{\chapter}{chapterfirst}
 \pagestyle{mainstyle}
 
 \input{chapters/1_wstep}
@@ -46,7 +47,7 @@
 \input{chapters/4_srodowisko_i_weryfikacja}
 \input{chapters/5_podsumowanie}
 
-% ============================== CZĘŚĆ KOŃCOWA ==============================
+% --- Bibliografia i spisy ---
 \ifshowbibliography
     \clearpage\phantomsection
     \pagestyle{bibstyle}
@@ -66,6 +67,12 @@
 \fi
 \ifshowlistofalgorithms
     \BackList{loastyle}{\listalgorithmcfname}{\listofalgorithms}
+\fi
+
+% --- Załączniki ---
+\ifshowappendices
+    \StartAppendices
+    \pagestyle{mainstyle}
 \fi
 
 \end{document}

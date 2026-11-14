@@ -1,9 +1,5 @@
-%***************************************************************************************************
-% preamble/polish.tex - WSZYSTKIE polskie napisy dokumentu w jednym miejscu.
-% Ładowany po pakietach (listings, algorithm2e), których nazwy nadpisuje.
-%***************************************************************************************************
+% Polskie etykiety dokumentu i słowa kluczowe dla algorithm2e.
 
-% Nazwy używane w nagłówkach spisów i podpisach
 \newcommand{\abbrevname}{Spis skrótów}
 
 \addto\captionspolish{%
@@ -21,16 +17,11 @@
   \renewcommand{\proofname}{Dowód}%
 }
 
-% Algorytmy (algorithm2e): nazwa środowiska, nazwa w odwołaniach i tytuł spisu
 \SetAlgorithmName{Algorytm}{algorytm}{Spis algorytmów}
-\SetAlFnt{\footnotesize}
-\SetAlCapFnt{\small}
-\SetAlCapNameFnt{\small\bfseries}
 
-% Słowa kluczowe w pseudokodzie (algorithm2e)
 \SetKwInOut{Input}{Dane wejściowe}
 \SetKwInOut{Output}{Wynik}
-\SetKwIF{If}{ElseIf}{Else}{jeżeli}{to}{w p.p. jeżeli}{w p.p.}{}
-\SetKwFor{For}{dla}{wykonaj}{}
-\SetKwFor{While}{dopóki}{wykonuj}{}
+\SetKwIF{If}{ElseIf}{Else}{jeżeli}{to}{w przeciwnym razie, jeżeli}{w przeciwnym razie}{koniec warunku}
+\SetKwFor{For}{dla}{wykonaj}{koniec pętli}
+\SetKwFor{While}{dopóki}{wykonuj}{koniec pętli}
 \SetKw{Return}{zwróć}

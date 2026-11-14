@@ -1,16 +1,16 @@
 # PSFirewallManager - Project Documentation
 
-[![View PDF](https://img.shields.io/badge/View-PDF-blue?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](https://alehshehda.github.io/OSS-FW-project/OSS-FW-project.pdf)
-[![Download PDF](https://img.shields.io/badge/Download-PDF-success?style=for-the-badge&logo=github&logoColor=white)](https://github.com/alehshehda/OSS-FW-project/releases/download/latest/OSS-FW-project.pdf)
+[![View PDF](https://img.shields.io/badge/View-PDF-blue?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](https://alehshehda.github.io/OSS-FW/OSS-FW.pdf)
+[![Download PDF](https://img.shields.io/badge/Download-PDF-success?style=for-the-badge&logo=github&logoColor=white)](https://github.com/alehshehda/OSS-FW/releases/download/latest/OSS-FW.pdf)
 [![Source Code](https://img.shields.io/badge/Code-PSFirewallManager-informational?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ruslanhedz/PSFirewallManager)
 
-Comprehensive technical documentation for **PSFirewallManager** - a PowerShell tool for Microsoft Windows Defender Firewall management, built with transactional write-ahead logging (WAL), tamper-evident SHA-256 audit trails, NLA profile binding, and remote Linux pull-model backups.
+Technical documentation for **PSFirewallManager** - a PowerShell tool for Microsoft Windows Defender Firewall management, built with transactional write-ahead logging (WAL), tamper-evident SHA-256 audit trails, NLA profile binding, and remote Linux pull-model backups.
 
 ---
 
 ## Key Highlights
 
-- **Interactive CLI & Validation (Module 1):** Robust input validation (IPv4/IPv6, CIDR, ports 1-65535, directional port binding) with structured rule naming (`<NR>-OSO-<Action>-<Direction>-<timestamp>`).
+- **Interactive CLI & Validation (Module 1):** Input validation (IPv4/IPv6, CIDR, ports 1-65535, directional port binding) with structured rule naming (`<NR>-OSO-<Action>-<Direction>-<timestamp>`).
 - **NLA & Network Profiles (Module 2):** Real-time Network Location Awareness diagnostics with multi-profile rule scoping (*Domain*, *Private*, *Public*, *Any*).
 - **Transactional Audit & Watcher (Module 3):** Registry/GPO differential snapshots (`FirewallPolicy`, `WindowsFirewall`), write-ahead logging (`intent` $\rightarrow$ `change` $\rightarrow$ `result`), continuous SHA-256 hash chaining, background event interception (`Watcher`), and fail-closed/fail-open policies.
 - **Secure Remote Backup (Module 4):** Automated pre-change exports in an inverted pull model over SSH (`forced command`), read-only SFTPGo storage (port 2022), 30-version retention, and two-phase restore with safety snapshots (`pre-restore`).
@@ -54,4 +54,4 @@ Project developed for the **Operating Systems Security** (*Ochrona Systemów Ope
 
 ## Compilation
 
-The document is automatically compiled to **`OSS-FW-project.pdf`** and published to GitHub Releases and GitHub Pages on every push to `main`.
+The document is automatically compiled to **`OSS-FW.pdf`** and published to GitHub Releases and GitHub Pages on every push to `main`.

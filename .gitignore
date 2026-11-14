@@ -1,10 +1,18 @@
-# LaTeX build files
+# Pliki pomocnicze i wyjściowe LaTeX / BibTeX / latexmk
 *.aux
 *.bbl
-*.bcf
 *.blg
+*.bcf
+*.dvi
 *.fdb_latexmk
 *.fls
+*.glo
+*.gls
+*.glg
+*.idx
+*.ilg
+*.ind
+*.ist
 *.loa
 *.lof
 *.log
@@ -12,22 +20,22 @@
 *.lot
 *.nav
 *.out
+*.ps
 *.run.xml
 *.snm
 *.synctex
-*.synctex(busy)
 *.synctex.gz
+*.synctex(busy)
+*.thm
 *.toc
 *.vrb
 *.xdv
 
-# Output PDF
-main.pdf
-OSS-FW-project.pdf
+# Skompilowane PDF-y w katalogu głównym (nie ignoruje grafik w images/ i appendices/)
+/*.pdf
 
-# OS / Editor files
+# Pliki systemowe i tymczasowe
 .DS_Store
 Thumbs.db
-.vscode/
-.idea/
-
+*.bak
+*~

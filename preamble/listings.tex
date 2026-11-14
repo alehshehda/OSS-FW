@@ -1,11 +1,5 @@
-%***************************************************************************************************
-% preamble/listings.tex - jeden wspólny styl listingów (kod i wyjście terminala).
-% Użycie: \begin{lstlisting}[caption={Opis}, label={lst:etykieta}] ... \end{lstlisting}
-%         \begin{lstlisting}[style=code, language=PowerShell, ...] ... \end{lstlisting}
-%         \lstinputlisting[style=code, language=PowerShell, caption={...}, label={...}]{plik.ps1}
-%***************************************************************************************************
+% Style listingów: terminal (domyślny) i code.
 
-% Polskie znaki w listingach (pdfLaTeX + UTF-8); mapowanie zdefiniowane tylko tutaj
 \lstset{
   inputencoding=utf8,
   extendedchars=true,
@@ -28,7 +22,6 @@
   alsoletter={-}
 }
 
-% Styl bazowy
 \lstdefinestyle{base}{
   basicstyle=\ttfamily\footnotesize,
   columns=fullflexible,
@@ -43,13 +36,11 @@
   belowskip=1em,
 }
 
-% Wyjście terminala / sesja konsoli (styl domyślny)
 \lstdefinestyle{terminal}{
   style=base,
   backgroundcolor=\color{gray!6},
 }
 
-% Kod źródłowy (z numerami wierszy i kolorami)
 \lstdefinestyle{code}{
   style=base,
   numbers=left,
@@ -65,5 +56,4 @@
 
 \lstset{style=terminal}
 
-% Numeracja listingów w obrębie rozdziału (jak rysunki i tabele)
 \AtBeginDocument{\counterwithin{lstlisting}{chapter}}

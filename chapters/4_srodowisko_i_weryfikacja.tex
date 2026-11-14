@@ -4,7 +4,7 @@ Niniejszy rozdział charakteryzuje środowisko uruchomieniowe wykorzystane do wd
 
 \section{Środowisko uruchomieniowe i konfiguracja bezpieczeństwa}\label{sec:srodowisko-testowe}
 
-System został wdrożony i przetestowany w dwuwęzłowej architekturze sieciowej łączącej zarządzaną stację roboczą z systemem Microsoft Windows oraz dedykowany serwer kopii zapasowych z systemem Linux. Parametry obu węzłów oraz skonfigurowanych usług zestawiono w tabeli~\ref{tab:srodowisko-testowe}, natomiast całościową topologię połączeń, komponentów i przepływów protokołów komunikacyjnych przedstawiono na rysunku~\ref{fig:environment-topology}.
+System został wdrożony i przetestowany w dwuwęzłowej architekturze sieciowej łączącej zarządzaną stację roboczą z systemem Microsoft Windows oraz dedykowany serwer kopii zapasowych z systemem Linux. Parametry obu węzłów oraz skonfigurowanych usług zestawiono w tabeli \ref{tab:srodowisko-testowe}, natomiast całościową topologię połączeń, komponentów i przepływów protokołów komunikacyjnych przedstawiono na rysunku \ref{fig:environment-topology}.
 
 \Figure[1.0]{environment_topology.png}{Topologia dwuwęzłowego środowiska uruchomieniowego, separacja ról oraz kierunki przepływu protokołów komunikacyjnych}{fig:environment-topology}
 
@@ -18,19 +18,19 @@ System został wdrożony i przetestowany w dwuwęzłowej architekturze sieciowej
         \midrule
         System operacyjny & Microsoft Windows 10 Pro & Ubuntu Linux 26.04 LTS \\
         Adresacja IP (LAN) & \code{10.0.2.20} & \code{10.0.2.30} \\
-        Środowisko skryptowe & Windows PowerShell 5.1 (\textit{Desktop Edition}), .NET 4.8 & Powłoka systemowa \cmd{bash}, narzędzia \cmd{flock}, \cmd{sha256sum}, \cmd{base64} \\
+        Środowisko skryptowe & Windows PowerShell 5.1 (\textit{Desktop Edition}), .NET 4.8 & Powłoka systemowa \code{bash}, narzędzia \code{flock}, \code{sha256sum}, \code{base64} \\
         Usługi komunikacyjne & OpenSSH Client + OpenSSH Server (\code{sshd} na porcie TCP 22) & OpenSSH Server (port TCP 22) + SFTPGo (port TCP 2022) \\
         Konta operacyjne & Konto administratora \code{Student} + konto \code{SYSTEM} (\textit{Watcher}) & Konto systemowe \code{fwbackup} + konto usługi \code{sftpgo} \\
-        Katalogi chronione & \file{C:\FW}, \file{C:\ProgramData\FirewallAudit}, \file{C:\ProgramData\FirewallBackup} & \file{/etc/fwbackup}, \file{/srv/fwbackups/student/backups} \\
+        Katalogi chronione & \code{C:\FW}, \code{C:\ProgramData\FirewallAudit}, \code{C:\ProgramData\FirewallBackup} & \code{/etc/fwbackup}, \code{/srv/fwbackups/student/backups} \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
 W celu zapewnienia odporności wdrożenia na lokalną eskalację uprawnień oraz nieautoryzowany dostęp sieciowy zastosowano następujące środki utwardzania konfiguracji:
 \begin{enumerate}
-    \item \textbf{Ochrona katalogów skryptów i dzienników na stacji Windows} - katalogi \file{C:\FW} oraz \file{C:\ProgramData\FirewallAudit} posiadają wyłączone dziedziczenie uprawnień DACL (\cmd{icacls.exe /inheritance:r}) i przyznają prawa zapisu wyłącznie kontom \code{SYSTEM} (\code{S-1-5-18}) oraz \code{Administratorzy} (\code{S-1-5-32-544}). Przed załadowaniem modułów \file{Backup-Create.ps1} i \file{Backup-Restore.ps1} skrypt główny weryfikuje listę ACL i odmawia uruchomienia w przypadku wykrycia praw zapisu dla nieuprzywilejowanych kont.
-    \item \textbf{Restrykcje usługi OpenSSH na stacji Windows} - w pliku konfiguracyjnym \file{sshd_config} ograniczono dostęp dyrektywami \code{AllowUsers student@10.0.2.30} oraz \code{PasswordAuthentication no}, a reguła zapory \code{FWBackup-SSH-In} zezwala na ruch przychodzący na port TCP~22 wyłącznie ze wskazanego adresu IP serwera kopii (\code{10.0.2.30}).
-    \item \textbf{Separacja uprawnień na serwerze Ubuntu} - skrypt \file{fw-server.sh} należy do konta \code{root} (\code{0755}), katalog kopii \file{/srv/fwbackups/student/backups} posiada uprawnienia \code{2750} (\code{fwbackup:sftpgo}, bit \code{setgid}), a wirtualne konto \code{student} w SFTPGo ma przyznane wyłącznie uprawnienia \code{list} oraz \code{download}.
+    \item \textbf{Ochrona katalogów skryptów i dzienników na stacji Windows} - katalogi \code{C:\FW} oraz \code{C:\ProgramData\FirewallAudit} posiadają wyłączone dziedziczenie uprawnień DACL (\code{icacls.exe /inheritance:r}) i przyznają prawa zapisu wyłącznie kontom \code{SYSTEM} (\code{S-1-5-18}) oraz \code{Administratorzy} (\code{S-1-5-32-544}). Przed załadowaniem modułów \code{Backup-Create.ps1} i \code{Backup-Restore.ps1} skrypt główny weryfikuje listę ACL i odmawia uruchomienia w przypadku wykrycia praw zapisu dla nieuprzywilejowanych kont.
+    \item \textbf{Restrykcje usługi OpenSSH na stacji Windows} - w pliku konfiguracyjnym \code{sshd_config} ograniczono dostęp dyrektywami \code{AllowUsers student@10.0.2.30} oraz \code{PasswordAuthentication no}, a reguła zapory \code{FWBackup-SSH-In} zezwala na ruch przychodzący na port TCP 22 wyłącznie ze wskazanego adresu IP serwera kopii (\code{10.0.2.30}).
+    \item \textbf{Separacja uprawnień na serwerze Ubuntu} - skrypt \code{fw-server.sh} należy do konta \code{root} (\code{0755}), katalog kopii \code{/srv/fwbackups/student/backups} posiada uprawnienia \code{2750} (\code{fwbackup:sftpgo}, bit \code{setgid}), a wirtualne konto \code{student} w SFTPGo ma przyznane wyłącznie uprawnienia \code{list} oraz \code{download}.
 \end{enumerate}
 
 \section{Weryfikacja funkcjonalna i testy automatyczne}\label{sec:testy-weryfikacja}
@@ -39,36 +39,36 @@ Strategię weryfikacji poprawności działania systemu podzielono na trzy uzupe�
 
 \subsection{Automatyczny potok CI/CD i analiza statyczna kodu}\label{subsec:potok-ci-cd}
 
-W repozytorium kodu wdrożono zautomatyzowany potok CI/CD oparty na GitHub Actions (\file{.github/workflows/ci.yml}), który przy każdym commicie oraz żądaniu pull request uruchamia dwa równoległe zadania weryfikacyjne:
+W repozytorium kodu wdrożono zautomatyzowany potok CI/CD oparty na GitHub Actions (\code{.github/workflows/ci.yml}), który przy każdym commicie oraz żądaniu pull request uruchamia dwa równoległe zadania weryfikacyjne:
 \begin{itemize}
     \item \textbf{Środowisko Windows (\code{windows-latest})} - weryfikuje poprawność składniową kodu PowerShell za pomocą lintera \code{PSScriptAnalyzer} (z filtrem \code{-Severity Error}), po czym uruchamia testy jednostkowe modułu audytu, interfejsu CLI oraz modułu kopii zapasowych.
-    \item \textbf{Środowisko Linux (\code{ubuntu-latest})} - wykonuje analizę statyczną skryptu powłoki serwera \file{fw-server.sh} narzędziem \cmd{shellcheck}, a następnie uruchamia zestaw testów jednostkowych serwera w środowisku \cmd{bash}.
+    \item \textbf{Środowisko Linux (\code{ubuntu-latest})} - wykonuje analizę statyczną skryptu powłoki serwera \code{fw-server.sh} narzędziem \code{shellcheck}, a następnie uruchamia zestaw testów jednostkowych serwera w środowisku \code{bash}.
 \end{itemize}
 
 Dzięki takiemu podejściu wszelkie regresje składniowe lub naruszenia kontraktów API są natychmiast wychwytywane.
 
-\subsection{Izolowane testy jednostkowe w piaskownicy (\file{tests/})}\label{subsec:testy-jednostkowe}
+\subsection{Izolowane testy jednostkowe w piaskownicy}\label{subsec:testy-jednostkowe}
 
-Aby umożliwić szybką weryfikację logiki aplikacji na stacjach deweloperskich oraz w kontenerach CI/CD bez konieczności podnoszenia uprawnień do poziomu administratora i bez ingerencji w rzeczywiste reguły sieciowe jądra, opracowano zestaw testów jednostkowych działających w sandbox:
+Aby umożliwić szybką weryfikację logiki aplikacji na stacjach deweloperskich oraz w kontenerach CI/CD bez konieczności podnoszenia uprawnień do poziomu administratora i bez ingerencji w rzeczywiste reguły sieciowe jądra, opracowano zestaw testów jednostkowych działających w piaskownicy:
 \begin{enumerate}
-    \item \textbf{Audyt transakcyjny i kontrakt AST (\file{Test-FirewallAudit.ps1})} - przekierowuje operacje rejestru do gałęzi \code{HKCU\Software\FwAuditTest-<GUID>}, wykorzystuje lokalny muteks oraz tymczasowy katalog w \file{\%TEMP\%}. Sprawdza integralność łańcucha skrótów SHA-256, procedurę rotacji przy 10~MB oraz politykę \textit{fail-closed}/\textit{fail-open}. Ponadto za pomocą analizatora AST (\code{Language.Parser}) bada cały plik \file{firewall.ps1}, weryfikując, czy wszystkie modyfikacje zapory (cmdlety \cmd{*-NetFirewallRule} i program \cmd{netsh advfirewall}) są hermetycznie opakowane w wywołanie \code{Invoke-AuditedChange}.
-    \item \textbf{Interfejs CLI i walidacja danych (\file{Test-CliHelpers.ps1})} - wyodrębnia za pomocą AST funkcje pomocnicze (\code{Read-ProfileChoice}, \code{Read-ProtocolChoice}, \code{Get-AuditPolicyStatusLine}) i testuje je z wykorzystaniem deterministycznej kolejki wejściowej mockującej polecenie \cmd{Read-Host}. Weryfikuje odrzucanie niepoprawnych adresów IPv4/IPv6, masek CIDR i portów spoza zakresu $1\text{-}65535$, automatyczne kierunkowe przypisanie portów oraz format generowanych nazw reguł z prefiksem \code{OSO-}.
-    \item \textbf{Klient kopii zapasowych (\file{Test-BackupModule.ps1})} - testuje funkcje modułów \file{Backup-Create.ps1} i \file{Backup-Restore.ps1}. Weryfikuje walidację nazw kont użytkowników wyrażeniem regularnym \code{^[a-z0-9][a-z0-9._-]{0,31}$}, odporność na próby obejścia katalogu (\textit{path traversal}, np.\ \code{../}), obsługę portów SSH/SFTP oraz weryfikację sum kontrolnych SHA-256 pobranych plików polityki \file{.wfw}.
-    \item \textbf{Serwer kopii zapasowych Ubuntu (\file{test-fw-server.sh})} - uruchamia wyizolowane procedury skryptu \file{fw-server.sh} w katalogu tymczasowym. Weryfikuje parsowanie pliku konfiguracyjnego \file{clients.conf}, mechanizm blokady współbieżności (\cmd{flock}) oraz politykę retencji archiwum (automatyczne przycinanie najstarszych kopii z zachowaniem maksymalnie 30 ostatnich stanów).
+    \item \textbf{Audyt transakcyjny i kontrakt AST (\code{Test-FirewallAudit.ps1})} - przekierowuje operacje rejestru do gałęzi \code{HKCU\Software\FwAuditTest-<GUID>}, wykorzystuje lokalny muteks oraz tymczasowy katalog w \code{%TEMP%}. Sprawdza integralność łańcucha skrótów SHA-256, procedurę rotacji przy 10 MB oraz politykę \textit{fail-closed}/\textit{fail-open}. Ponadto za pomocą analizatora AST (\code{Language.Parser}) bada cały plik \code{firewall.ps1}, weryfikując, czy wszystkie modyfikacje zapory (cmdlety \code{*-NetFirewallRule} i program \code{netsh advfirewall}) są hermetycznie opakowane w wywołanie \code{Invoke-AuditedChange}.
+    \item \textbf{Interfejs CLI i walidacja danych (\code{Test-CliHelpers.ps1})} - wyodrębnia za pomocą AST funkcje pomocnicze (\code{Read-ProfileChoice}, \code{Read-ProtocolChoice}, \code{Get-AuditPolicyStatusLine}) i testuje je z wykorzystaniem deterministycznej kolejki wejściowej mockującej polecenie \code{Read-Host}. Weryfikuje odrzucanie niepoprawnych adresów IPv4/IPv6, masek CIDR i portów spoza zakresu $1\text{-}65535$, automatyczne kierunkowe przypisanie portów oraz format generowanych nazw reguł z prefiksem \code{OSO-}.
+    \item \textbf{Klient kopii zapasowych (\code{Test-BackupModule.ps1})} - testuje funkcje modułów \code{Backup-Create.ps1} i \code{Backup-Restore.ps1}. Weryfikuje walidację nazw kont użytkowników wyrażeniem regularnym \code{^[a-z0-9][a-z0-9._-]{0,31}$}, odporność na próby obejścia katalogu (\textit{path traversal}, np. \code{../}), obsługę portów SSH/SFTP oraz weryfikację sum kontrolnych SHA-256 pobranych plików polityki \code{.wfw}.
+    \item \textbf{Serwer kopii zapasowych Ubuntu (\code{test-fw-server.sh})} - uruchamia wyizolowane procedury skryptu \code{fw-server.sh} w katalogu tymczasowym. Weryfikuje parsowanie pliku konfiguracyjnego \code{clients.conf}, mechanizm blokady współbieżności (\code{flock}) oraz politykę retencji archiwum (automatyczne przycinanie najstarszych kopii z zachowaniem maksymalnie 30 ostatnich stanów).
 \end{enumerate}
 
-\subsection{Test akceptacyjny end-to-end na maszynie wirtualnej (\file{Invoke-WatcherAcceptance.ps1})}\label{subsec:testy-akceptacyjne}
+\subsection{Test akceptacyjny end-to-end na maszynie wirtualnej}\label{subsec:testy-akceptacyjne}
 
-Weryfikację elementów wymagających rzeczywistych uprawnień administratora oraz interakcji z podsystemami jądra Windows (zadanie harmonogramu \code{SYSTEM}, chroniona lista ACL w \file{C:\ProgramData\FirewallAudit}, odczyt zdarzeń z kanału \code{MPSSVC}) realizuje skrypt akceptacyjny \file{tests\Invoke-WatcherAcceptance.ps1}. Skrypt ten przeprowadza pełny cykl życia systemu na rzeczywistej maszynie wirtualnej:
+Weryfikację elementów wymagających rzeczywistych uprawnień administratora oraz interakcji z podsystemami jądra Windows (zadanie harmonogramu \code{SYSTEM}, chroniona lista ACL w \code{C:\ProgramData\FirewallAudit}, odczyt zdarzeń z kanału \code{MPSSVC}) realizuje skrypt akceptacyjny \code{tests\Invoke-WatcherAcceptance.ps1}. Skrypt ten przeprowadza pełny cykl życia systemu na rzeczywistej maszynie wirtualnej:
 \begin{enumerate}
     \item weryfikuje ochronę ACL katalogu audytu (brak praw modyfikacji dla grup \code{Users}, \code{Everyone} oraz \code{Authenticated Users}),
-    \item instaluje zadanie \code{\FirewallAudit\Watcher} i potwierdza konfigurację 3 wyzwalaczy (zdarzeniowy, startowy, okresowy co 15~min) oraz zgodność skrótu SHA-256 skryptu w katalogu \file{bin},
-    \item tworzy i usuwa testową regułę \code{FWAUDIT-ACCEPT-<id>-external} bezpośrednim wywołaniem cmdletu \cmd{New-NetFirewallRule} (poza narzędziem), po czym potwierdza przechwycenie zdarzenia przez zadanie \textit{Watcher} oraz poprawną atrybucję sprawcy z dziennika zdarzeń zapory,
-    \item symuluje awarię dziennika poprzez zablokowanie pliku \file{audit.jsonl} wyłącznym uchwytem \code{FileShare.None}, weryfikując zablokowanie zmiany w trybie \code{Closed} oraz prawidłowe odłożenie znacznika i późniejsze uzgodnienie w trybie \code{Open},
+    \item instaluje zadanie \code{\FirewallAudit\Watcher} i potwierdza konfigurację 3 wyzwalaczy (zdarzeniowy, startowy, okresowy co 15 min) oraz zgodność skrótu SHA-256 skryptu w katalogu \code{bin},
+    \item tworzy i usuwa testową regułę \code{FWAUDIT-ACCEPT-<id>-external} bezpośrednim wywołaniem cmdletu \code{New-NetFirewallRule} (poza narzędziem), po czym potwierdza przechwycenie zdarzenia przez zadanie \textit{Watcher} oraz poprawną atrybucję sprawcy z dziennika zdarzeń zapory,
+    \item symuluje awarię dziennika poprzez zablokowanie pliku \code{audit.jsonl} wyłącznym uchwytem \code{FileShare.None}, weryfikując zablokowanie zmiany w trybie \code{Closed} oraz prawidłowe odłożenie znacznika i późniejsze uzgodnienie w trybie \code{Open},
     \item sprawdza ciągłość łańcucha skrótów SHA-256 i usuwa reguły testowe.
 \end{enumerate}
 
-Zbiorcze zestawienie zrealizowanych scenariuszy weryfikacyjnych przedstawiono w tabeli~\ref{tab:wyniki-testow}.
+Zbiorcze zestawienie zrealizowanych scenariuszy weryfikacyjnych przedstawiono w tabeli \ref{tab:wyniki-testow}.
 
 \begin{table}[H]
     \centering
@@ -81,14 +81,14 @@ Zbiorcze zestawienie zrealizowanych scenariuszy weryfikacyjnych przedstawiono w 
         \code{T-01} & Walidacja i numeracja (Moduł 1, \code{WF-01}, \code{WF-02}) & Odrzucanie błędnych adresów IP (ciągi znaków, pojedyncze liczby, oktety $>255$) oraz portów spoza zakresu $1\text{-}65535$; poprawne nadanie numerów \code{05-OSO-*} i \code{06-OSO-*} oraz usuwanie po indeksie. & \cmark \\
         \code{T-02} & Semantyka portów (Moduł 1, \code{WF-01}) & Wymuszenie protokołu TCP/UDP po podaniu portu oraz automatyczne przypisanie \code{LocalPort} dla \textit{Inbound} i \code{RemotePort} dla \textit{Outbound}. & \cmark \\
         \code{T-03} & Profile sieciowe NLA (Moduł 2, \code{WF-03}) & Odczyt aktywnej kategorii interfejsu, przypisanie reguł do wybranych profili (\code{Public}, \code{Any}) i ich selektywne egzekwowanie. & \cmark \\
-        \code{T-04} & Kontrakt AST i WAL (Moduł 3, \code{WF-04}, \code{WNF-04}) & Analiza statyczna AST pliku \file{firewall.ps1} (brak niezaudytowanych wywołań), trójfazowy zapis \code{intent} $\rightarrow$ \code{change} $\rightarrow$ \code{result}, detekcja \code{scope-escape} i czas migawki $<1$~s. & \cmark \\
-        \code{T-05} & Łańcuch skrótów SHA-256 (Moduł 3, \code{WF-06}) & Weryfikacja spójności 77 rekordów w \file{audit.jsonl} oraz wykrycie modyfikacji treści, usunięcia wiersza, obcięcia końca pliku (\textit{head hash}) i podmiany \file{baseline.json}. & \cmark \\
+        \code{T-04} & Kontrakt AST i WAL (Moduł 3, \code{WF-04}, \code{WNF-04}) & Analiza statyczna AST pliku \code{firewall.ps1} (brak niezaudytowanych wywołań), trójfazowy zapis \code{intent} $\rightarrow$ \code{change} $\rightarrow$ \code{result}, detekcja \code{scope-escape} i czas migawki $<1$ s. & \cmark \\
+        \code{T-05} & Łańcuch skrótów SHA-256 (Moduł 3, \code{WF-06}) & Weryfikacja spójności 77 rekordów w \code{audit.jsonl} oraz wykrycie modyfikacji treści, usunięcia wiersza, obcięcia końca pliku (\textit{head hash}) i podmiany \code{baseline.json}. & \cmark \\
         \code{T-06} & Zadanie \textit{Watcher} (Moduł 3, \code{WF-05}, \code{WNF-02}) & Utworzenie i usunięcie reguły poza narzędziem; przechwycenie zmiany przez zadanie \code{SYSTEM}, atrybucja sprawcy i weryfikacja uprawnień ACL. & \cmark \\
-        \code{T-07} & Polityka awarii (Moduł 3, \code{WNF-01}) & Zablokowanie pliku \file{audit.jsonl}: odmowa zmiany w trybie \code{Closed}, wykrycie ręcznej edycji \file{settings.json} oraz uzgodnienie \file{pending.jsonl} w trybie \code{Open}. & \cmark \\
+        \code{T-07} & Polityka awarii (Moduł 3, \code{WNF-01}) & Zablokowanie pliku \code{audit.jsonl}: odmowa zmiany w trybie \code{Closed}, wykrycie ręcznej edycji \code{settings.json} oraz uzgodnienie \code{pending.jsonl} w trybie \code{Open}. & \cmark \\
         \code{T-08} & Eksport \textit{pull} (Moduł 4, \code{WF-07}, \code{WNF-03}) & Automatyczne utworzenie kopii na serwerze \code{10.0.2.30} przed dodaniem (\code{auto-add}) i usunięciem reguły (\code{auto-delete}); weryfikacja sumy SHA-256 i grup SFTPGo. & \cmark \\
-        \code{T-09} & Odtwarzanie polityki (Moduł 4, \code{WF-08}, \code{WNF-03}) & Przywrócenie kopii \file{.wfw} przez SFTPGo: utworzenie kopii ratunkowej \code{pre-restore}, weryfikacja SHA-256 przed importem i rejestracja \code{Restore} w audycie. & \cmark \\
-        \code{T-10} & Analiza statyczna i potok CI/CD (\code{ci.yml}) & Automatyczna weryfikacja reguł jakości kodu w GitHub Actions: \code{PSScriptAnalyzer} (\code{-Severity Error}) dla kodu PowerShell oraz \cmd{shellcheck} dla skryptu \file{fw-server.sh}. & \cmark \\
-        \code{T-11} & Testy jednostkowe w piaskownicy (\file{tests/}) & Izolowane testy bez uprawnień administratora: logika wejścia CLI (\file{Test-CliHelpers}), sanityzacja kont i ścieżek (\file{Test-BackupModule}) oraz retencja 30 kopii serwera Linux (\file{test-fw-server.sh}). & \cmark \\
+        \code{T-09} & Odtwarzanie polityki (Moduł 4, \code{WF-08}, \code{WNF-03}) & Przywrócenie kopii \code{.wfw} przez SFTPGo: utworzenie kopii ratunkowej \code{pre-restore}, weryfikacja SHA-256 przed importem i rejestracja \code{Restore} w audycie. & \cmark \\
+        \code{T-10} & Analiza statyczna i potok CI/CD (\code{ci.yml}) & Automatyczna weryfikacja reguł jakości kodu w GitHub Actions: \code{PSScriptAnalyzer} (\code{-Severity Error}) dla kodu PowerShell oraz \code{shellcheck} dla skryptu \code{fw-server.sh}. & \cmark \\
+        \code{T-11} & Testy jednostkowe w piaskownicy (\code{tests/}) & Izolowane testy bez uprawnień administratora: logika wejścia CLI (\code{Test-CliHelpers}), sanityzacja kont i ścieżek (\code{Test-BackupModule}) oraz retencja 30 kopii serwera Linux (\code{test-fw-server.sh}). & \cmark \\
         \bottomrule
     \end{tabularx}
 \end{table}
