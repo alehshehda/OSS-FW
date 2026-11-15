@@ -21,12 +21,12 @@ Technical documentation for **PSFirewallManager** - a PowerShell tool for Micros
 
 Project developed for the **Operating Systems Security** (*Ochrona Systemów Operacyjnych* - OSO) course at **Wrocław University of Science and Technology** (WUST / PWr), Faculty of Information and Communication Technology (Cybersecurity).
 
-| Author | Student ID | Area of Responsibility |
-| :--- | :---: | :--- |
-| **Aleh Shehda** | 272277 | Module 3: Transactional WAL Audit, Hash Chain, Watcher, Fail-Closed/Open |
-| **Aliaksei Lapachuk** | 276711 | Module 2: NLA Integration, Network Location Profiles, Protocol Selection |
-| **Adam Rola** | 272194 | Module 1: Interactive CLI Wizard, IPv4/IPv6 & Port Validation, Rule Indexing |
-| **Ruslan Hedz** | 272212 | Module 4: Client-Server Backup Engine, SSH Pull Agent, SFTPGo Integration |
+| Author | Area of Responsibility |
+| :--- | :--- |
+| **Aleh Shehda** | Module 3: Transactional WAL Audit, Hash Chain, Watcher, Fail-Closed/Open |
+| **Aliaksei Lapachuk** | Module 2: NLA Integration, Network Location Profiles, Protocol Selection |
+| **Adam Rola** | Module 1: Interactive CLI Wizard, IPv4/IPv6 & Port Validation, Rule Indexing |
+| **Ruslan Hedz** | Module 4: Client-Server Backup Engine, SSH Pull Agent, SFTPGo Integration |
 
 **Project Supervisor:** mgr inż. Adrian Florek
 
