@@ -1,0 +1,64 @@
+% !tikz-libs: babel,positioning,arrows.meta,calc
+% Topologia dwuwęzłowego środowiska uruchomieniowego i sekwencja wymiany protokołów (Windows 10.0.2.20 <-> Ubuntu 10.0.2.30).
+\begin{tikzpicture}[
+  >= {Stealth[length=2.2mm, width=1.5mm]}
+]
+
+  % --- 1. Uczestnicy (Ikony Affinity square_gray + czysty podpis bez pudełek) ---
+  \node[iconnode] (win_icon) at (0,0) {\AffIcon[1.25cm]{sq_client}};
+  \node[iconlabel, below=0.18cm of win_icon] (win_lbl) {%
+    \textbf{Stacja robocza (Klient)}\\
+    \texttt{Windows 10 Pro} $\cdot$ \texttt{10.0.2.20/24}\\
+    {\color{acadMuted}\texttt{firewall.ps1} $\cdot$ \texttt{OpenSSH :22} $\cdot$ Audyt WAL}%
+  };
+
+  \node[iconnode, right=9.8cm of win_icon] (srv_icon) {\AffIcon[1.25cm]{sq_server}};
+  \node[iconlabel, below=0.18cm of srv_icon] (srv_lbl) {%
+    \textbf{Serwer kopii zapasowych}\\
+    \texttt{Ubuntu 26.04 LTS} $\cdot$ \texttt{10.0.2.30/24}\\
+    {\color{acadMuted}\texttt{fw-server.sh} $\cdot$ \texttt{OpenSSH :22} $\cdot$ \texttt{SFTPGo :2022}}%
+  };
+
+  % --- 2. Pionowe linie życia (Lifelines) ---
+  \coordinate (win_top) at ($(win_lbl.south)+(0,-0.2cm)$);
+  \coordinate (srv_top) at ($(srv_lbl.south)+(0,-0.2cm)$);
+  \coordinate (win_bot) at ($(win_top)+(0,-4.5cm)$);
+  \coordinate (srv_bot) at ($(srv_top)+(0,-4.5cm)$);
+
+  \draw[lifeline] (win_top) -- (win_bot);
+  \draw[lifeline] (srv_top) -- (srv_bot);
+
+  % --- 3. Sekwencja wymiany komunikatów (Kroki 1..4 z góry na dół) ---
+  % Krok 1
+  \coordinate (y1_l) at ($(win_top)+(0,-0.65cm)$);
+  \coordinate (y1_r) at ($(srv_top)+(0,-0.65cm)$);
+  \draw[flow] (y1_l) --
+    node[flowlabel, above=1.5pt] {\textbf{1)} Inicjacja operacji: \texttt{backup <powód>} lub \texttt{restore <plik.wfw>}}
+    node[flowlabel, below=1.5pt, text=acadMuted] {\texttt{SSH TCP :22} (konto \texttt{fwbackup}, wymuszone polecenie \texttt{command=/usr/local/bin/fw-server.sh})}
+    (y1_r);
+
+  % Krok 2
+  \coordinate (y2_l) at ($(win_top)+(0,-1.85cm)$);
+  \coordinate (y2_r) at ($(srv_top)+(0,-1.85cm)$);
+  \draw[flow, draw=acadBlue] (y2_r) --
+    node[flowlabel, above=1.5pt, text=acadBlue] {\textbf{2)} Pobranie eksportu polityki w modelu odwróconym (\textit{Server-Side Pull})}
+    node[flowlabel, below=1.5pt, text=acadMuted] {\texttt{SSH TCP :22} (klucz \texttt{id\_export}, dyrektywa \texttt{restrict} $\rightarrow$ \texttt{-Agent Export} zwraca Base64 + SHA-256)}
+    (y2_l);
+
+  % Krok 3
+  \coordinate (y3_l) at ($(win_top)+(0,-3.05cm)$);
+  \coordinate (y3_r) at ($(srv_top)+(0,-3.05cm)$);
+  \draw[flow] (y3_r) --
+    node[flowlabel, above=1.5pt] {\textbf{3)} Pobranie wybranych plików kopii \texttt{*.wfw} oraz \texttt{*.wfw.sha256} (Faza II Restore)}
+    node[flowlabel, below=1.5pt, text=acadMuted] {\texttt{SFTP TCP :2022} (\texttt{SFTPGo}, zasób \texttt{/backups} wyłącznie z uprawnieniami \texttt{list} oraz \texttt{download})}
+    (y3_l);
+
+  % Krok 4
+  \coordinate (y4_l) at ($(win_top)+(0,-4.15cm)$);
+  \coordinate (y4_r) at ($(srv_top)+(0,-4.15cm)$);
+  \draw[<->, semithick, densely dashed, draw=acadMuted] (y4_l) --
+    node[flowlabel, above=1.5pt] {\textbf{4)} Dwustronna weryfikacja kryptograficzna SHA-256 i utrwalenie w dzienniku WAL}
+    node[flowlabel, below=1.5pt, text=acadMuted] {Klient: \texttt{audit.jsonl} $\leftrightarrow$ \texttt{baseline.json} \quad\textbar\quad Serwer: atomowy zapis w \texttt{/srv/fwbackups} (retencja 30 kopii)}
+    (y4_r);
+
+\end{tikzpicture}
